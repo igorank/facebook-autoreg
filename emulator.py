@@ -712,7 +712,8 @@ class Emulator(QRunnable, AppiumCommunicator):
                 try:
                     driver = self.setup_drony(driver, caps)
                     break
-                except:
+                except Exception as exception:
+                    print(exception)
                     AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
                                                "shell am force-stop org.sandrob.drony")
                     AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),

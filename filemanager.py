@@ -15,14 +15,14 @@ class FileManager:
         with open(filename, 'r') as read_file:
             lines = read_file.readlines()
 
-        currentLine = 1
+        current_line = 1
         with open(filename, 'w') as write_file:
             for line in lines:
-                if currentLine == linetoskip:
+                if current_line == linetoskip:
                     pass
                 else:
                     write_file.write(line)
-                currentLine += 1
+                current_line += 1
 
     @staticmethod
     def remove_line_by_text(filename, text):

@@ -3,8 +3,7 @@ import sys
 import adb
 from PyQt6.QtGui import QIcon, QTextCursor
 from PyQt6.QtCore import QSize, QObject, pyqtSignal, Qt
-from PyQt6.QtWidgets import QMainWindow, QPushButton, QPlainTextEdit, QVBoxLayout, QWidget, \
-    QLabel, QGridLayout, QComboBox, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QPushButton, QPlainTextEdit, QVBoxLayout, QWidget, QGridLayout, QMessageBox
 from emulatorwindow import EmulatorWindow
 from threadmanager import ThreadManager
 from emulator import Emulator
@@ -25,8 +24,8 @@ class MainWindow(QMainWindow):
         myappid = 'mycompany.myproduct.subproduct.version'  # arbitrary string
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-        sys.stdout = Stream(newText=self.onUpdateText)
-        self.setWindowTitle("Autoreg")
+        sys.stdout = Stream(newText=self.on_update_text)
+        self.setWindowTitle("Facebook Autoreg")
         self.setWindowIcon(QIcon("icon.png"))
         self.setFixedSize(QSize(640, 480))
 
@@ -37,21 +36,15 @@ class MainWindow(QMainWindow):
         # self.browser_window = BrowserWindow(self, Qt.WindowType.Widget)
 
         # Main Grid and Widgets
-        self.registration_type_text = QLabel("Registration Type:")
-        self.registration_type = QComboBox()
-        self.registration_type.addItems(["Facebook (LDPlayer)"])
-        self.registration_type.currentIndexChanged.connect(self.changeState)
         main_grid = QGridLayout()
         main_grid.setSpacing(10)
-        main_grid.addWidget(self.registration_type_text, 0, 0)
-        main_grid.addWidget(self.registration_type, 0, 1, Qt.AlignmentFlag.AlignLeading, 6)
 
         self.logger = QPlainTextEdit()
         self.logger.setReadOnly(True)
 
         self.button = QPushButton("Start")
         self.button.setCheckable(True)
-        self.button.clicked.connect(self.btnstate)
+        self.button.clicked.connect(self.btn_state)
 
         main_layout = QVBoxLayout()
         main_layout.addLayout(main_grid)
@@ -65,12 +58,7 @@ class MainWindow(QMainWindow):
         container.setLayout(main_layout)
         self.setCentralWidget(container)
 
-    def changeState(self):
-        if self.registration_type.currentIndex() == 0:
-            self.emulator_window.show()
-            # self.browser_window.show()
-
-    def onUpdateText(self, text):
+    def on_update_text(self, text):
         cursor = self.logger.textCursor()
         cursor.movePosition(QTextCursor.MoveOperation.End)
         cursor.insertText(text)
@@ -85,20 +73,21 @@ class MainWindow(QMainWindow):
     def connected(self):
         self.button.setEnabled(True)
 
-    def btnstate(self):
+    def btn_state(self):
         if self.button.isEnabled():
             self.button.setEnabled(False)
-            if self.registration_type.currentIndex() == 0:
-                emulator = Emulator()
-                emulator.signals.connected.connect(self.connected)
-                self.emulator_window.run_thread(emulator)
+            emulator = Emulator()
+            emulator.signals.connected.connect(self.connected)
+            self.emulator_window.run_thread(emulator)
         else:
             self.button.setEnabled(True)
 
     def closeEvent(self, event):
         if self.thread_manager.activeThreadCount() == 0:
             reply = QMessageBox.question(self, 'Window Close', 'Are you sure you want to close the window?',
-                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+                                         QMessageBox.StandardButton.Yes |
+                                         QMessageBox.StandardButton.No,
+                                         QMessageBox.StandardButton.No)
 
             if reply == QMessageBox.StandardButton.Yes:
                 sys.stdout = sys.__stdout__  # restore stdout before quitting
@@ -112,7 +101,9 @@ class MainWindow(QMainWindow):
             else:
                 event.ignore()
         else:
-            reply = QMessageBox.warning(self, 'Warning', 'You cannot close the program because the program is already running. Wait until the end of the program execution.')
+            reply = QMessageBox.warning(self, 'Warning', 'You cannot close the program because'
+                                                         ' the program is already running.'
+                                                         ' Wait until the end of the program execution.')
             if reply == QMessageBox.StandardButton.Ok:
                 event.ignore()
             else:
