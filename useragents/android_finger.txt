@@ -1,0 +1,7 @@
+google/android_x86/x86:7.1.2/N2G48B/V9.5.8.0.OCACNFA:user/release-keys
+google/android_x86/x86:7.1.0/N2G48B/V9.6.2.0.OCACNFD:user/release-keys
+google/android_x86/x86:7.1.2/N2G48B/V9.6.3.0.OCACNFD:user/release-keys
+google/android_x86/x86:8.0/N2G48B/V9.0.6.0.NCACNEI:user/release-keys
+google/android_x86/x86:8.1/N2G48B/V10.0.1.0.OCACNFH:user/release-keys
+google/android_x86/x86:9.0/N2G48B/V10.2.1.0.OCACNFK:user/release-keys
+google/android_x86/x86:10.0/N2G48B/V10.3.1.0.OCACNXM:user/release-keys
