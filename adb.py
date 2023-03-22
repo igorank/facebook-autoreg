@@ -36,17 +36,10 @@ class AdbManager:
 
     @staticmethod
     def get_connected_devices():
-        # sub_process = subprocess.Popen("adb devices", shell=True,
-        #                                stdout=subprocess.PIPE)
         if not AdbManager.is_running():
             print("Adb is not running. Starting adb...")
-            # subprocess.Popen("C:\\Users\\Igor\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe start-server",
-            #                  shell=True) # org
             subprocess.call("adb.exe start-server", shell=False)
-            # time.sleep(20) # delay for adb init (TEMP?)
 
-        # sub_process = subprocess.Popen("C:\\Users\\Igor\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe devices", shell=True,
-        #                                stdout=subprocess.PIPE) # org
         sub_process = subprocess.Popen("adb.exe devices", shell=True, stdout=subprocess.PIPE)
         sub_process_return = str(sub_process.stdout.read())
         res = [i for i in range(len(sub_process_return)) if sub_process_return.startswith("tdevice", i)]

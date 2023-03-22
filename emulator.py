@@ -483,7 +483,7 @@ class Emulator(QRunnable, AppiumCommunicator):
                 self.find_element(driver, "id", "com.android.packageinstaller:id/permission_deny_button").click()
             if use_email:
                 self.find_element(driver, "xpath",
-                                  "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View",
+                                  "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/androidx.recyclerview.widget.RecyclerView/android.view.ViewGroup[6]/android.view.ViewGroup[2]/android.view.View",
                                   "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[2]/android.view.View").click()  # зарег с помощью почты кнопка
                 self.find_element(driver, "xpath",
                                   "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView",
@@ -703,7 +703,7 @@ class Emulator(QRunnable, AppiumCommunicator):
             self.signals.finished.emit()
             return 1
 
-        print("Profile " + str(self.title) + " has been connected to Appium\n")
+        print("Profile " + str(self.title) + " has been connected to Appium")
         self.signals.connected.emit()
 
         if self.use_proxy:

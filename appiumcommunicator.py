@@ -7,7 +7,8 @@ from appium.webdriver.common.mobileby import MobileBy
 class AppiumCommunicator:
 
     @staticmethod
-    def find_element(driver, find_by, element, alternative_element=None, alternative_element2=None, alternative_element3=None):
+    def find_element(driver, find_by, element, alternative_element=None,
+                     alternative_element2=None, alternative_element3=None):
         it = 0
         while it < 15:
             try:
@@ -21,13 +22,10 @@ class AppiumCommunicator:
                 time.sleep(3)
                 if find_by == "id":
                     return driver.find_element(MobileBy.ID, str(element))
-                    # return driver.find_element_by_id(str(element))
                 elif find_by == "ac_id":
                     return driver.find_element(MobileBy.ACCESSIBILITY_ID, str(element))
-                    # return driver.find_element_by_accessibility_id(str(element))
                 elif find_by == "xpath":
                     return driver.find_element(MobileBy.XPATH, str(element))
-                    # return driver.find_element_by_xpath(str(element))
             except:
                 if alternative_element is not None:
                     try:
@@ -40,7 +38,6 @@ class AppiumCommunicator:
                             # return driver.find_element_by_accessibility_id(str(alternative_element))
                         elif find_by == "xpath":
                             return driver.find_element(MobileBy.XPATH, str(alternative_element))
-                            # return driver.find_element_by_xpath(str(alternative_element))
                     except:
                         if alternative_element2 is not None:
                             try:
@@ -52,7 +49,6 @@ class AppiumCommunicator:
                                     # return driver.find_element_by_accessibility_id(str(alternative_element2))
                                 elif find_by == "xpath":
                                     return driver.find_element(MobileBy.XPATH, str(alternative_element2))
-                                    # return driver.find_element_by_xpath(str(alternative_element2))
                             except:
                                 if alternative_element3 is not None:
                                     try:
@@ -65,7 +61,6 @@ class AppiumCommunicator:
                                             # return driver.find_element_by_accessibility_id(str(alternative_element3))
                                         elif find_by == "xpath":
                                             return driver.find_element(MobileBy.XPATH, str(alternative_element3))
-                                            # return driver.find_element_by_xpath(str(alternative_element3))
                                     except:
                                         pass
                                 pass
@@ -87,7 +82,7 @@ class AppiumCommunicator:
     @staticmethod
     def check_right_swap_drony(driver):
         while True:
-            # if driver.find_element_by_xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/androidx.viewpager.widget.ViewPager/android.widget.LinearLayout/android.widget.FrameLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[8]/android.widget.RelativeLayout"):
+            # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/androidx.viewpager.widget.ViewPager/android.widget.LinearLayout/android.widget.FrameLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[8]/android.widget.RelativeLayout"):
             if driver.find_element(by=MobileBy.XPATH, value="/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/androidx.viewpager.widget.ViewPager/android.widget.LinearLayout/android.widget.FrameLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[8]/android.widget.RelativeLayout"):
                 return 0
             else:
@@ -157,13 +152,14 @@ class AppiumCommunicator:
         it = 0
         while it < 30:
             try:
-                if driver.find_element_by_xpath(
-                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
+                if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
+                # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
                     return True
             except:
                 try:
-                    if driver.find_element_by_xpath(
-                            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView"):
+                    if driver.find_element(MobileBy.XPATH,
+                                           "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView"):
+                        # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView"):
                         return True
                 except:
                     pass
@@ -175,22 +171,21 @@ class AppiumCommunicator:
 
     @staticmethod
     def date_field_available(driver):
-        it = 0
-        while it < 10:
+        for _ in range(10):
             try:
-                if driver.find_element_by_xpath(
-                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup[1]"):
+                if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup[1]"):
+                # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup[1]"):
                     return True
             except:
                 try:
-                    if driver.find_element_by_xpath(
-                            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]"):
+                    if driver.find_element(MobileBy.XPATH,
+                                           "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]"):
+                        # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]"):
                         return True
                 except:
                     pass
                 pass
             time.sleep(2)
-            it += 1
         print("Error: can't find date field")
         return False
 
@@ -199,31 +194,31 @@ class AppiumCommunicator:
         it = 0
         while it < 30:
             try:
-                if driver.find_element_by_xpath(
+                if driver.find_element(MobileBy.XPATH,
                         "//android.view.View[@content-desc=\"Скачать информацию\"]/android.widget.TextView"):
                     print("Checkpoint")
                     return 1
             except:
                 try:
-                    if driver.find_element_by_xpath(
+                    if driver.find_element(MobileBy.XPATH,
                             "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View/android.view.View/android.view.View[1]/android.view.View[1]"):
                         print("Checkpoint")
                         return 1
                 except:
                     try:
-                        if driver.find_element_by_xpath(
+                        if driver.find_element(MobileBy.XPATH,
                                 "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
                             print("Email has been already used")
                             return 1
                     except:
                         try:
-                            if driver.find_element_by_xpath(
+                            if driver.find_element(MobileBy.XPATH,
                                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.View[5]"):
                                 print("Unknown error")
                                 return 1
                         except:
                             try:
-                                # driver.find_element_by_xpath(
+                                # driver.find_element(MobileBy.XPATH,
                                 #     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[2]/android.view.View").click()
                                 driver.find_element(MobileBy.XPATH, '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[2]/android.view.View').click()
                                 print("Successful registration")
@@ -232,7 +227,7 @@ class AppiumCommunicator:
                                 return 0
                             except:
                                 try:
-                                    # driver.find_element_by_xpath(
+                                    # driver.find_element(MobileBy.XPATH,
                                     #     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View").click()
                                     driver.find_element(MobileBy.XPATH,
                                                         '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View').click()
@@ -282,7 +277,7 @@ class AppiumCommunicator:
             if not use_email:
                 try:
                     # BUG
-                    if driver.find_element_by_xpath(
+                    if driver.find_element(MobileBy.XPATH,
                             "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[3]"):
                         print("Profile verified")
                         return True
@@ -291,14 +286,14 @@ class AppiumCommunicator:
             else:
                 pass
             try:
-                if driver.find_element_by_xpath(
+                if driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View[2]"):
                     print("Profile verified")
                     return True
             except:
                 pass
             try:
-                if driver.find_element_by_xpath(
+                if driver.find_element(MobileBy.XPATH,
                 "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[2]/android.view.View[2]"):
                     print("Profile verified")
                     return True
@@ -321,12 +316,12 @@ class AppiumCommunicator:
     def send_year_facebooklite(driver):
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[1]/android.view.View").click()  # 1
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[1]/android.view.View").click()  # 1
                     break
                 except:
@@ -334,12 +329,12 @@ class AppiumCommunicator:
         time.sleep(0.5)
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[9]/android.view.View").click()  # 9
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[9]/android.view.View").click()  # 9
                     break
                 except:
@@ -347,12 +342,12 @@ class AppiumCommunicator:
         time.sleep(0.5)
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[9]/android.view.View").click()  # 9
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[9]/android.view.View").click()  # 9
                     break
                 except:
@@ -361,13 +356,13 @@ class AppiumCommunicator:
         num1 = random.randint(1, 8)
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
                         num1) + "]/android.view.View").click()  # random
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
                             num1) + "]/android.view.View").click()  # random
                     break
@@ -381,13 +376,13 @@ class AppiumCommunicator:
         num1 = random.randint(1, 2)
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
                         num1) + "]/android.view.View").click()  # random 1-2
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
                             num1) + "]/android.view.View").click()  # random 1-2
                     break
@@ -397,13 +392,13 @@ class AppiumCommunicator:
         num2 = random.randint(1, 8)
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
                         num2) + "]/android.view.View").click()  # random 1-8
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
                             num2) + "]/android.view.View").click()  # random 1-8
                     break
@@ -416,12 +411,12 @@ class AppiumCommunicator:
         time.sleep(0.5)
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                 "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[11]/android.view.View").click()  # 0
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[11]/android.view.View").click()  # 0
                     break
                 except:
@@ -430,13 +425,13 @@ class AppiumCommunicator:
         num1 = random.randint(1, 8)
         while True:
             try:
-                driver.find_element_by_xpath(
+                driver.find_element(MobileBy.XPATH,
                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
                         num1) + "]/android.view.View").click()  # random 1-8
                 break
             except:
                 try:
-                    driver.find_element_by_xpath(
+                    driver.find_element(MobileBy.XPATH,
                         "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
                             num1) + "]/android.view.View").click()  # random 1-8
                     break

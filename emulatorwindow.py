@@ -16,7 +16,6 @@ class EmulatorWindow(QWidget):
     def __init__(self, parent=None, flags=None):
         super().__init__(parent, flags)
 
-        #self.emulator = Emulator()
         self.thread_manager = ThreadManager()
 
         self.ldplayer_path_text = QLabel("Path to LDPlayer:")
@@ -72,10 +71,10 @@ class EmulatorWindow(QWidget):
         # DEBUG
         self.ldplayer_path.setText(r"C:\LDPlayer\LDPlayer4.0")
         self.emails_list.setText(r"C:\Users\igora\Documents\Projects\facebook-autoreg\emails.txt")
-        self.proxy_host.setText("oproxy.site")
-        self.proxy_port.setText("12536")
-        self.proxy_login.setText("SUV4FU")
-        self.proxy_password.setText("eT3PAwKEqavC")
+        self.proxy_host.setText("geo.iproyal.com")
+        self.proxy_port.setText("42324")
+        self.proxy_login.setText("gotogo")
+        self.proxy_password.setText("1995igor_country-ua_session-a8i7p9xu_lifetime-12h")
         self.change_ip_url.setText("https://mobileproxy.space/reload.html?proxy_key=d7b59504de76caa1d494e882584cca74")
 
         api_grid = QGridLayout()
@@ -118,8 +117,6 @@ class EmulatorWindow(QWidget):
         change_ip_grid.addWidget(self.change_ip_url, 0, 1)
         change_ip_grid.addWidget(self.delete_dalvik_cache_text, 0, 2)
         change_ip_grid.addWidget(self.delete_dalvik_cache, 0, 3)
-        # change_ip_grid.addWidget(self.loop_numbers_text, 0, 2)
-        # change_ip_grid.addWidget(self.loop_numbers, 0, 3)
 
         layout = QVBoxLayout()
         layout.addLayout(api_grid)
@@ -177,7 +174,6 @@ class EmulatorWindow(QWidget):
 
     # @pyqtSlot()
     def run_thread(self, emulator):
-        #emulator = Emulator()
         if not AppiumServer.is_running():
             AppiumServer.start()
         self.set_settings(emulator)
