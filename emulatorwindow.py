@@ -71,11 +71,11 @@ class EmulatorWindow(QWidget):
         # DEBUG
         self.ldplayer_path.setText(r"C:\LDPlayer\LDPlayer4.0")
         self.emails_list.setText(r"C:\Users\igora\Documents\Projects\facebook-autoreg\emails.txt")
-        self.proxy_host.setText("geo.iproyal.com")
-        self.proxy_port.setText("42324")
-        self.proxy_login.setText("gotogo")
-        self.proxy_password.setText("1995igor_country-ua_session-a8i7p9xu_lifetime-12h")
-        self.change_ip_url.setText("https://mobileproxy.space/reload.html?proxy_key=d7b59504de76caa1d494e882584cca74")
+        self.proxy_host.setText("oproxy.site")
+        self.proxy_port.setText("14163")
+        self.proxy_login.setText("rekdEU")
+        self.proxy_password.setText("pea8EN1rAnaC")
+        self.change_ip_url.setText("https://mobileproxy.space/reload.html?proxy_key=edfd7f1360d4d522ae089f8e50dfa683")
 
         api_grid = QGridLayout()
         api_grid.setSpacing(10)

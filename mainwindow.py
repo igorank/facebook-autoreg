@@ -95,7 +95,6 @@ class MainWindow(QMainWindow):
                 if adb.AdbManager.all_indices:
                     ld_console = Ldconsole()
                     ld_console.set_path(ld_console.get_spath())
-                    # print(ld_console.get_path())
                     for i in adb.AdbManager.all_indices:
                         ld_console.remove_by_index(i)
             else:
