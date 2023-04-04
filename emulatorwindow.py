@@ -31,7 +31,8 @@ class EmulatorWindow(QWidget):
         self.ldplayer_path = QLineEdit()
         self.sms_activate_api_key = QLineEdit()
         self.country_number = QComboBox()
-        country_number_list = ["RU", "UA", 'KZ', 'PH', 'ID', 'MY', 'VN', 'KG', 'PL', 'GB', 'IN', 'SK', "EE"]
+        country_number_list = ["RU", "UA", 'KZ', 'PH', 'ID', 'MY',
+                               'VN', 'KG', 'PL', 'GB', 'IN', 'SK', "EE"]
         country_number_list.sort()
         self.country_number.addItems(country_number_list)
         self.emails_list_text = QLabel("List of Emails:")

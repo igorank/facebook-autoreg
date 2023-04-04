@@ -547,7 +547,7 @@ class Emulator(QRunnable):
                 break
             try:
                 if driver.find_element(MobileBy.XPATH,
-                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup"):
+                                       "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup"):
                     self.find_element(driver, "xpath",
                                       "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]",
                                       "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]").click()
@@ -604,9 +604,8 @@ class Emulator(QRunnable):
                                                              self.proxy_login,
                                                              self.proxy_password, self.proxy_host,
                                                              self.proxy_port)
-        file = open(filename, "a")
-        file.write(str(useragent) + ";" + str(cookies) + ";" + str(token) + ";\n")
-        file.close()
+        with open(filename, "a") as file:
+            file.write(str(useragent) + ";" + str(cookies) + ";" + str(token) + ";\n")
         # return useragent, cookies, token
 
     def __get_names(self, names, surnames, names_eng, surnames_eng):
@@ -638,7 +637,6 @@ class Emulator(QRunnable):
             except:
                 pass
             try:
-                # print("Looking for " + str(element) + " element")
                 time.sleep(3)
                 if find_by == "id":
                     return driver.find_element(MobileBy.ID, str(element))
@@ -660,10 +658,8 @@ class Emulator(QRunnable):
                             try:
                                 if find_by == "id":
                                     return driver.find_element(MobileBy.ID, str(alternative_element2))
-                                    # return driver.find_element_by_id(str(alternative_element2))
                                 if find_by == "ac_id":
                                     return driver.find_element(MobileBy.ACCESSIBILITY_ID, str(alternative_element2))
-                                    # return driver.find_element_by_accessibility_id(str(alternative_element2))
                                 if find_by == "xpath":
                                     return driver.find_element(MobileBy.XPATH, str(alternative_element2))
                             except:
@@ -671,11 +667,9 @@ class Emulator(QRunnable):
                                     try:
                                         if find_by == "id":
                                             return driver.find_element(MobileBy.ID, str(alternative_element3))
-                                            # return driver.find_element_by_id(str(alternative_element3))
                                         if find_by == "ac_id":
                                             return driver.find_element(MobileBy.ACCESSIBILITY_ID,
                                                                        str(alternative_element3))
-                                            # return driver.find_element_by_accessibility_id(str(alternative_element3))
                                         if find_by == "xpath":
                                             return driver.find_element(MobileBy.XPATH, str(alternative_element3))
                                     except:
@@ -766,7 +760,6 @@ class Emulator(QRunnable):
                         return True
                 except:
                     pass
-                pass
             time.sleep(2)
         print("Error: can't find date field")
         return False
@@ -805,7 +798,7 @@ class Emulator(QRunnable):
                                                     '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[2]/android.view.View').click()
                                 print("Successful registration")
                                 Emulator.find_element(driver, "id",
-                                                                "com.android.packageinstaller:id/permission_deny_button").click()
+                                                      "com.android.packageinstaller:id/permission_deny_button").click()
                                 return 0
                             except:
                                 try:
@@ -815,17 +808,17 @@ class Emulator(QRunnable):
                                                         '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View').click()
                                     print("Successful registration")
                                     Emulator.find_element(driver, "id",
-                                                                    "com.android.packageinstaller:id/permission_deny_button").click()
+                                                          "com.android.packageinstaller:id/permission_deny_button").click()
                                     return 0
                                 except:
                                     try:
                                         driver.find_element(MobileBy.XPATH,
                                                             '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]').click()  # "произошла ошибка"
                                         Emulator.find_element(driver, "xpath",
-                                                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[7]",
-                                                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[7]",
-                                                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[5]",
-                                                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[5]").click()  # registration
+                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[7]",
+                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[7]",
+                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[5]",
+                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[5]").click()  # registration
                                     except:
                                         try:
                                             driver.find_element(MobileBy.XPATH,
@@ -876,8 +869,8 @@ class Emulator(QRunnable):
                 driver.find_element(MobileBy.XPATH,
                                     '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]').click()  # "произошла ошибка"
                 Emulator.find_element(driver, "xpath",
-                                                "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
-                                                "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
+                                      "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
+                                      "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
             except:
                 pass
             time.sleep(2)
@@ -1012,6 +1005,29 @@ class Emulator(QRunnable):
         return str(0) + str(num1)
 
     @staticmethod
+    def __get_device(prof_index):
+        while True:
+            current_device = AdbManager.get_list_difference(AdbManager.get_connected_devices(),
+                                                            AdbManager.get_list_of_launched_devices())
+            if len(current_device):
+                AdbManager.add_index_to_dic(prof_index, current_device[0])
+                AdbManager.add_launched_device(current_device[0])
+                return current_device[0]
+            time.sleep(3)
+
+    def __init_drony(self, driver, caps, prof_indx):
+        while True:  # пока дрони не инициализируется
+            try:
+                driver = self.__setup_drony(driver, caps)
+                return driver
+            except Exception as exception:
+                print(exception)
+                AdbManager.execute_command(AdbManager.get_dict_value_by_key(prof_indx),
+                                           "shell am force-stop org.sandrob.drony")
+                AdbManager.execute_command(AdbManager.get_dict_value_by_key(prof_indx),
+                                           "shell pm clear org.sandrob.drony")
+
+    @staticmethod
     def __close_chrome(driver):
         driver.terminate_app('com.android.chrome')
 
@@ -1055,14 +1071,7 @@ class Emulator(QRunnable):
         self.ld_console.launch(self.title)
         time.sleep(10)  # TEMP
 
-        while True:
-            current_device = AdbManager.get_list_difference(AdbManager.get_connected_devices(),
-                                                            AdbManager.get_list_of_launched_devices())
-            if len(current_device):
-                AdbManager.add_index_to_dic(profile_index, current_device[0])
-                AdbManager.add_launched_device(current_device[0])
-                break
-            time.sleep(3)
+        device = self.__get_device(profile_index)
 
         caps = {"platformName": "Android", "udid": str(AdbManager.get_dict_value_by_key(profile_index)),
                 "newCommandTimeout": 99999}
@@ -1072,7 +1081,7 @@ class Emulator(QRunnable):
             self.__exit(self.ld_console, driver, self.title)
             IPChanger.change_ip(self.change_ip_url)
             AdbManager.delete_index_from_dict(profile_index)
-            AdbManager.remove_launched_device(current_device[0])
+            AdbManager.remove_launched_device(device)
             self.signals.finished.emit()
             return
 
@@ -1081,16 +1090,7 @@ class Emulator(QRunnable):
 
         if self.use_proxy:
             self.ld_console.install_app(self.title, app_name=r'apps\drony.apk')
-            while True:  # пока дрони не инициализируется
-                try:
-                    driver = self.__setup_drony(driver, caps)
-                    break
-                except Exception as exception:
-                    print(exception)
-                    AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                               "shell am force-stop org.sandrob.drony")
-                    AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                               "shell pm clear org.sandrob.drony")
+            driver = self.__init_drony(driver, caps, profile_index)
 
         self.ld_console.install_app(self.title, app_name=r'apps\facebook_lite_v320.0.0.12.108.apk')
 
@@ -1111,30 +1111,28 @@ class Emulator(QRunnable):
                         FileManager.remove_line_by_text(self.emails_file,
                                                         str(num_or_email))  # удаляем почту из txt файла
                     else:
-                        code = self.__get_mobile_code(sms_activate, driver, self.activation_id, 8)  # получаем код на номер
+                        code = self.__get_mobile_code(sms_activate, driver, self.activation_id,
+                                                      8)  # получаем код на номер
                     if code != 0:
                         self.__verify_fblite_by_mob(driver, code)
-                        file = open("autoregs_emu.txt", "a")
-                        fb_username = num_or_email if self.use_email else self.phone
-                        file.write(str(fb_username) + ";" + password + ";")
-                        if self.use_email:
-                            file.write(emails[i].partition(";")[2].partition(";")[0] + ";")  # write email password
-                        file.write(name + " " + surname + ";" + self.date_of_birth + ";")
-                        file.close()
+                        with open("autoregs_emu.txt", "a") as file:
+                            fb_username = num_or_email if self.use_email else self.phone
+                            file.write(str(fb_username) + ";" + password + ";")
+                            if self.use_email:
+                                file.write(emails[i].partition(";")[2].partition(";")[0] + ";")  # write email password
+                            file.write(name + " " + surname + ";" + self.date_of_birth + ";")
                         if self.__check_registration(driver, self.use_email):
                             try:
                                 self.__get_fbdata(num_or_email, self.phone, password, "autoregs_emu.txt")
                             except Exception as exception:
                                 print(exception)
-                                file = open("autoregs_emu.txt", "a")
-                                file.write("\n")
-                                file.close()
+                                with open("autoregs_emu.txt", "a") as file:
+                                    file.write("\n")
                             if not self.use_email:
                                 sms_activate.setStatus(id=self.activation_id, status=6)  # завершить активацию
                         else:
-                            file = open("autoregs_emu.txt", "a")
-                            file.write("\n")
-                            file.close()
+                            with open("autoregs_emu.txt", "a") as file:
+                                file.write("\n")
                         driver.terminate_app('com.facebook.lite')
                         AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
                                                    "shell pm clear com.facebook.lite")
@@ -1152,7 +1150,7 @@ class Emulator(QRunnable):
                     else:
                         if not self.use_email:
                             sms_activate.setStatus(id=self.activation_id,
-                                         status=8)  # сообщить о том, что номер использован и отменить активацию
+                                                   status=8)  # сообщить о том, что номер использован и отменить активацию
                         driver.terminate_app('com.facebook.lite')
                         AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
                                                    "shell pm clear com.facebook.lite")
@@ -1170,7 +1168,7 @@ class Emulator(QRunnable):
                 elif reg_status == 0:
                     if not self.use_email:
                         sms_activate.setStatus(id=self.activation_id,
-                                     status=8)  # сообщить о том, что номер использован и отменить активацию
+                                               status=8)  # сообщить о том, что номер использован и отменить активацию
                     if driver.query_app_state("com.android.chrome") == 4:
                         self.__close_chrome(driver)
                     driver.terminate_app('com.facebook.lite')
@@ -1194,7 +1192,7 @@ class Emulator(QRunnable):
                 # print('Failed.')
                 if not self.use_email:
                     sms_activate.setStatus(id=self.activation_id,
-                                 status=8)  # сообщить о том, что номер использован и отменить активацию
+                                           status=8)  # сообщить о том, что номер использован и отменить активацию
                 if driver.query_app_state("com.android.chrome") == 4:
                     self.__close_chrome(driver)
                 driver.terminate_app('com.facebook.lite')
@@ -1214,5 +1212,5 @@ class Emulator(QRunnable):
                 continue
         self.__exit(self.ld_console, driver, self.title)
         AdbManager.delete_index_from_dict(profile_index)
-        AdbManager.remove_launched_device(current_device[0])
+        AdbManager.remove_launched_device(device)
         self.signals.finished.emit()

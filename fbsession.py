@@ -1,8 +1,8 @@
 import re
 import json
 import random
-import requests
 from html import unescape
+import requests
 from useragent import UserAgent
 
 
@@ -12,28 +12,31 @@ class FBSession:
         super().__init__()
         self.useragent = UserAgent("useragents\\useragents_win.txt")
 
-    def set_proxy(self, session, login, password, ip, port):
+    @staticmethod
+    def set_proxy(session, login, password, ip, port):
         pstr = f"socks5://{login}:{password}@{ip}:{port}"
         # print(f"Using proxy: {pstr}")
         sproxy = {"https": pstr, "http": pstr}
         session.proxies = sproxy
         return
 
-    def dump_cookies(self, sessioncookies):
+    @staticmethod
+    def dump_cookies(sessioncookies):
         cookies = []
-        for c in sessioncookies:
+        for i in sessioncookies:
             cookies.append(
                 {
-                    "name": c.name,
-                    "value": c.value,
-                    "domain": c.domain,
-                    "path": c.path,
-                    "expires": c.expires,
+                    "name": i.name,
+                    "value": i.value,
+                    "domain": i.domain,
+                    "path": i.path,
+                    "expires": i.expires,
                 }
             )
         return cookies
 
-    def get_redirect(self, text):
+    @staticmethod
+    def get_redirect(text):
         match = re.search('window\.location\.replace\("([^"]+)', text)
         if match is None:
             return None
@@ -61,10 +64,10 @@ class FBSession:
         if redirect is not None:
             response = session.get(redirect, allow_redirects=True)
             return self.parse_token(response.text)
-        else:
-            return self.parse_token(response.text)
+        return self.parse_token(response.text)
 
-    def get_login_form_params(self, text):
+    @staticmethod
+    def get_login_form_params(text):
         match = re.search('name="lsd"\s+value="([^"]+)"', text)
         lsd = match.group(1)
         match = re.search('name="jazoest"\s+value="([^"]+)"', text)
@@ -85,10 +88,12 @@ class FBSession:
         session.headers.update({"User-Agent": user_agent})
         return user_agent
 
-    def set_headers(self, session):
+    @staticmethod
+    def set_headers(session):
         session.headers.update(
             {
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+                "Accept": "text/html,application/xhtml+xml,"
+                          "application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
             }
         )
         session.headers.update({"Accept-Encoding": "gzip"})

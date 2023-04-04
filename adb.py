@@ -1,6 +1,6 @@
 import os
-import psutil
 import subprocess
+import psutil
 
 
 class AdbManager:
@@ -8,16 +8,6 @@ class AdbManager:
     all_indices = []
     runned_devices = []
     devices_dict = {}
-
-    # def __new__(cls):
-    #     if not hasattr(cls, 'instance'):
-    #         cls.instance = super(AdbManager, cls).__new__(cls)
-    #     return cls.instance
-
-    # def __init__(self):
-    #     super().__init__()
-        # self.runned_devices = []
-        # self.devices_dict = {}
 
     @staticmethod
     def is_running():
@@ -87,17 +77,8 @@ class AdbManager:
 
     @staticmethod
     def execute_command(device_name, command):
-        devnull = open(os.devnull, 'wb')
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        # print("C:\\Users\\Igor\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -s " + str(device_name) + " " + str(command)) # DEBUG
-        # subprocess.Popen("C:\\Users\\Igor\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -s " + str(device_name) + " " + str(command), shell=True) # org
-        subprocess.call("adb.exe -s " + str(device_name) + " " + str(command), shell=False, stdout=devnull, stderr=devnull, startupinfo=startupinfo)
-        #subprocess.Popen("adb -s " + str(device_name) + " " + str(command), shell=True)
-        # sub_process_return = str(sub_process.stdout.read())
-        # index = sub_process_return.find(str("Success"))
-        # res = sub_process_return[index:index + 7]
-        # if res == "Success":
-        #     return True
-        # else:
-        #     return False
+        with open(os.devnull, 'wb') as devnull:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            subprocess.call("adb.exe -s " + str(device_name) + " " + str(command),
+                            shell=False, stdout=devnull, stderr=devnull, startupinfo=startupinfo)

@@ -1,9 +1,10 @@
 import ctypes
 import sys
-import adb
 from PyQt6.QtGui import QIcon, QTextCursor
 from PyQt6.QtCore import QSize, QObject, pyqtSignal, Qt
-from PyQt6.QtWidgets import QMainWindow, QPushButton, QPlainTextEdit, QVBoxLayout, QWidget, QGridLayout, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QPushButton,\
+    QPlainTextEdit, QVBoxLayout, QWidget, QGridLayout, QMessageBox
+import adb
 from emulatorwindow import EmulatorWindow
 from threadmanager import ThreadManager
 from emulator import Emulator
@@ -84,7 +85,8 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         if self.thread_manager.activeThreadCount() == 0:
-            reply = QMessageBox.question(self, 'Window Close', 'Are you sure you want to close the window?',
+            reply = QMessageBox.question(self, 'Window Close',
+                                         'Are you sure you want to close the window?',
                                          QMessageBox.StandardButton.Yes |
                                          QMessageBox.StandardButton.No,
                                          QMessageBox.StandardButton.No)
