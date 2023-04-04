@@ -24,9 +24,6 @@ class RandCoordGenerator:
     #         cls.instance = super(RandCoordGenerator, cls).__new__(cls)
     #     return cls.instance
 
-    def __init__(self):
-        super().__init__()
-
     def polygon_random_points(self, country, num_points=1):
         geo_dict = {
           "UA": RandCoordGenerator.poly_ua,

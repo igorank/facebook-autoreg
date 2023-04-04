@@ -49,7 +49,6 @@ class Ldconsole:
         subprocess.call(self.path_to_ldplayer + "ldconsole.exe add --name "
                         + str(mnq_name), shell=False, stdout=devnull,
                         stderr=devnull, startupinfo=Ldconsole.startupinfo)
-        # time.sleep(4)
         print("Profile " + str(mnq_name) + " has been added")
 
     def remove(self, mnq_name):

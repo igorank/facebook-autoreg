@@ -141,7 +141,7 @@ class Emulator(QRunnable):
         self.delete_dalvik_cache = boolean
 
     @staticmethod
-    def get_driver(number_of_attempts, desired_caps):
+    def __get_driver(number_of_attempts, desired_caps):
         for _ in range(number_of_attempts):
             try:
                 driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", desired_caps)
@@ -178,7 +178,6 @@ class Emulator(QRunnable):
         except:
             pass
         ldconsole.quit(title)
-        # ldconsole.remove(title)
 
     def __change_port(self, driver, desried_caps, port):
         while True:
@@ -341,9 +340,6 @@ class Emulator(QRunnable):
         driver.find_element(MobileBy.XPATH,
                             '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText').send_keys(
             self.proxy_login)
-        # self.find_element(driver, "xpath",
-        #                   "/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText").send_keys(
-        #     self.proxy_login)  # login
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.ID,
                                               'android:id/button1')))
@@ -415,7 +411,7 @@ class Emulator(QRunnable):
         time.sleep(1)
         return driver
 
-    def __facebook_lite_reg(self, driver, name, surname, password, num_or_email=None, use_email=False):
+    def __facebook_lite_reg(self, driver, name, surname, password, num_or_email=None, use_email=False) -> int:
         actions = ActionChains(driver)
         actions.w3c_actions = ActionBuilder(driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
         try:
@@ -454,10 +450,7 @@ class Emulator(QRunnable):
                         break
                     except:
                         continue
-            # self.find_element(driver, "xpath",
-            #                   "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView[2]",
-            #                   "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView[2]").send_keys(
-            #     surname)
+
             while True:
                 try:
                     driver.find_element(MobileBy.XPATH,
@@ -680,7 +673,6 @@ class Emulator(QRunnable):
     @staticmethod
     def __check_right_swap_drony(driver):
         while True:
-            # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/androidx.viewpager.widget.ViewPager/android.widget.LinearLayout/android.widget.FrameLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[8]/android.widget.RelativeLayout"):
             if driver.find_element(by=MobileBy.XPATH,
                                    value="/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/androidx.viewpager.widget.ViewPager/android.widget.LinearLayout/android.widget.FrameLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[8]/android.widget.RelativeLayout"):
                 return 0
@@ -730,13 +722,11 @@ class Emulator(QRunnable):
             try:
                 if driver.find_element(MobileBy.XPATH,
                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
-                    # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
                     return True
             except:
                 try:
                     if driver.find_element(MobileBy.XPATH,
                                            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView"):
-                        # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView"):
                         return True
                 except:
                     pass
@@ -750,13 +740,11 @@ class Emulator(QRunnable):
             try:
                 if driver.find_element(MobileBy.XPATH,
                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup[1]"):
-                    # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup[1]"):
                     return True
             except:
                 try:
                     if driver.find_element(MobileBy.XPATH,
                                            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]"):
-                        # if driver.find_element(MobileBy.XPATH, "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]"):
                         return True
                 except:
                     pass
@@ -792,8 +780,6 @@ class Emulator(QRunnable):
                                 return 1
                         except:
                             try:
-                                # driver.find_element(MobileBy.XPATH,
-                                #     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[2]/android.view.View").click()
                                 driver.find_element(MobileBy.XPATH,
                                                     '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[2]/android.view.View').click()
                                 print("Successful registration")
@@ -802,8 +788,6 @@ class Emulator(QRunnable):
                                 return 0
                             except:
                                 try:
-                                    # driver.find_element(MobileBy.XPATH,
-                                    #     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View").click()
                                     driver.find_element(MobileBy.XPATH,
                                                         '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View').click()
                                     print("Successful registration")
@@ -1027,9 +1011,103 @@ class Emulator(QRunnable):
                 AdbManager.execute_command(AdbManager.get_dict_value_by_key(prof_indx),
                                            "shell pm clear org.sandrob.drony")
 
+    def __get_code(self, driver, sms_activate, num_or_email, email):
+        if self.use_email:
+            mail_reader = EmailReader("mail.inbox.lv", num_or_email,
+                                      email.partition(";")[2].partition(";")[2].partition(";")[0])
+            code = mail_reader.get_facebook_code(300)  # аргумент - задержка
+            FileManager.remove_line_by_text(self.emails_file,
+                                            str(num_or_email))  # удаляем почту из txt файла
+        else:
+            code = self.__get_mobile_code(sms_activate, driver, self.activation_id,
+                                          8)  # получаем код на номер
+        return code
+
+    def __write_file(self, num_or_email, passw, email, name, surname):
+        with open("autoregs_emu.txt", "a") as file:
+            fb_username = num_or_email if self.use_email else self.phone
+            file.write(str(fb_username) + ";" + passw + ";")
+            if self.use_email:
+                file.write(email.partition(";")[2].partition(";")[0] + ";")  # write email password
+            file.write(name + " " + surname + ";" + self.date_of_birth + ";")
+
+    def __proxy_check(self, driver, caps):
+        if self.use_proxy:
+            if len(self.change_ip_url) == 0 and self.use_dynamic_port:
+                driver = self.__change_port(driver, caps, self.proxy_port)
+                return driver
+            IPChanger.change_ip(self.change_ip_url)
+        return driver
+
+    def __unsuc_reg(self, driver, sms_activate, profile_index, caps):
+        if not self.use_email:
+            sms_activate.setStatus(id=self.activation_id,
+                                   status=8)  # сообщить о том, что номер использован и отменить активацию
+        if driver.query_app_state("com.android.chrome") == 4:
+            driver.terminate_app('com.android.chrome')
+        self.__close_fb_app(driver, profile_index)
+        if self.delete_dalvik_cache:
+            AdbManager.del_dalvik(profile_index)
+        self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
+        driver = self.__proxy_check(driver, caps)
+        return driver
+
     @staticmethod
-    def __close_chrome(driver):
-        driver.terminate_app('com.android.chrome')
+    def __write_newl():
+        with open("autoregs_emu.txt", "a") as file:
+            file.write("\n")
+
+    def __terminate(self, driver, device, profile_index):
+        self.__exit(self.ld_console, driver, self.title)
+        IPChanger.change_ip(self.change_ip_url)
+        AdbManager.delete_index_from_dict(profile_index)
+        AdbManager.remove_launched_device(device)
+
+    def __get_emails(self):
+        if self.use_email:
+            try:
+                emails = FileManager.get_filesdata(self.emails_file, True)
+                random.shuffle(emails)  # reorganize the order of the list items
+                self.number_of_profiles = len(emails)
+                return emails
+            except Exception as exception:
+                print(f"Unable to open file {str(self.emails_file)}: " + str(exception))
+                AppiumServer.forced_stop()
+                return None
+        else:
+            # emails = 0
+            return []
+
+    @staticmethod
+    def __get_profile_data() -> list:
+        names = FileManager.get_filesdata('names\\names.txt')
+        surnames = FileManager.get_filesdata('names\\surnames.txt')
+        names_eng = FileManager.get_filesdata('names\\names_eng.txt')
+        surnames_eng = FileManager.get_filesdata('names\\surnames_eng.txt')
+        return [names, surnames, names_eng, surnames_eng]
+
+    def __finish_reg(self, driver, sms_activate, num_or_email, password):
+        if self.__check_registration(driver, self.use_email):
+            try:
+                self.__get_fbdata(num_or_email, self.phone, password, "autoregs_emu.txt")
+            except Exception as exception:
+                print(exception)
+                self.__write_newl()
+            if not self.use_email:
+                sms_activate.setStatus(id=self.activation_id, status=6)  # завершить активацию
+        else:
+            self.__write_newl()
+
+    def __after_closing(self, profile_index):
+        if self.delete_dalvik_cache:
+            AdbManager.del_dalvik(profile_index)
+        self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
+
+    @staticmethod
+    def __close_fb_app(driver, profile_index):
+        driver.terminate_app('com.facebook.lite')
+        AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
+                                   "shell pm clear com.facebook.lite")
 
     @pyqtSlot()
     def run(self):
@@ -1037,23 +1115,11 @@ class Emulator(QRunnable):
         sms_activate = SMSActivateAPI(self.smsactivate_api_key)
         sms_activate.debug_mode = True  # TEMP?
 
-        names = FileManager.get_filesdata('names\\names.txt')
-        surnames = FileManager.get_filesdata('names\\surnames.txt')
-        names_eng = FileManager.get_filesdata('names\\names_eng.txt')
-        surnames_eng = FileManager.get_filesdata('names\\surnames_eng.txt')
-
-        if self.use_email:
-            try:
-                emails = FileManager.get_filesdata(self.emails_file, True)
-                random.shuffle(emails)  # reorganize the order of the list items
-            except Exception as exception:
-                print(f"Unable to open file {str(self.emails_file)}: " + str(exception))
-                AppiumServer.forced_stop()
-                self.signals.finished.emit()
-                return
-            self.number_of_profiles = len(emails)
-        else:
-            emails = 0
+        prof_data = self.__get_profile_data()
+        emails = self.__get_emails()
+        if emails is None:
+            self.signals.finished.emit()
+            return
 
         self.title = RandomGenerator.random_username(8)  # рвндомное название плеера
         self.ld_console.add(self.title)  # создаем плеер
@@ -1067,21 +1133,16 @@ class Emulator(QRunnable):
 
         number = RandomNumGenerator.get_rand_mob_num()
         self.ld_console.modify(self.title, str(number))
-
         self.ld_console.launch(self.title)
         time.sleep(10)  # TEMP
 
         device = self.__get_device(profile_index)
-
         caps = {"platformName": "Android", "udid": str(AdbManager.get_dict_value_by_key(profile_index)),
                 "newCommandTimeout": 99999}
 
-        driver = self.get_driver(3, caps)
+        driver = self.__get_driver(3, caps)
         if not driver:
-            self.__exit(self.ld_console, driver, self.title)
-            IPChanger.change_ip(self.change_ip_url)
-            AdbManager.delete_index_from_dict(profile_index)
-            AdbManager.remove_launched_device(device)
+            self.__terminate(driver, device, profile_index)
             self.signals.finished.emit()
             return
 
@@ -1099,117 +1160,36 @@ class Emulator(QRunnable):
                 num_or_email = self.__get_mailornum(emails, i, sms_activate)
                 if not num_or_email:
                     break
-                name, surname = self.__get_names(names, surnames, names_eng, surnames_eng)
+
+                name, surname = self.__get_names(prof_data[0], prof_data[1], prof_data[2], prof_data[3])
                 password = RandomGenerator.random_password(random.randint(12, 16))
                 reg_status = self.__facebook_lite_reg(driver, name, surname, password, num_or_email,
                                                       use_email=self.use_email)
                 if reg_status == 1:
-                    if self.use_email:
-                        mail_reader = EmailReader("mail.inbox.lv", num_or_email,
-                                                  emails[i].partition(";")[2].partition(";")[2].partition(";")[0])
-                        code = mail_reader.get_facebook_code(300)  # аргумент - задержка
-                        FileManager.remove_line_by_text(self.emails_file,
-                                                        str(num_or_email))  # удаляем почту из txt файла
-                    else:
-                        code = self.__get_mobile_code(sms_activate, driver, self.activation_id,
-                                                      8)  # получаем код на номер
+                    code = self.__get_code(driver, sms_activate, num_or_email, emails[i])
                     if code != 0:
                         self.__verify_fblite_by_mob(driver, code)
-                        with open("autoregs_emu.txt", "a") as file:
-                            fb_username = num_or_email if self.use_email else self.phone
-                            file.write(str(fb_username) + ";" + password + ";")
-                            if self.use_email:
-                                file.write(emails[i].partition(";")[2].partition(";")[0] + ";")  # write email password
-                            file.write(name + " " + surname + ";" + self.date_of_birth + ";")
-                        if self.__check_registration(driver, self.use_email):
-                            try:
-                                self.__get_fbdata(num_or_email, self.phone, password, "autoregs_emu.txt")
-                            except Exception as exception:
-                                print(exception)
-                                with open("autoregs_emu.txt", "a") as file:
-                                    file.write("\n")
-                            if not self.use_email:
-                                sms_activate.setStatus(id=self.activation_id, status=6)  # завершить активацию
-                        else:
-                            with open("autoregs_emu.txt", "a") as file:
-                                file.write("\n")
-                        driver.terminate_app('com.facebook.lite')
-                        AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                   "shell pm clear com.facebook.lite")
-                        if self.delete_dalvik_cache:
-                            AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                       "shell rm -r /data/dalvik-cache")
-                            AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                       "shell rm -r /cache/dalvik-cache")
-                        self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
-                        if self.use_proxy:
-                            if len(self.change_ip_url) == 0 and self.use_dynamic_port:
-                                driver = self.__change_port(driver, caps, self.proxy_port)
-                            else:
-                                IPChanger.change_ip(self.change_ip_url)
+                        self.__write_file(num_or_email, password, emails[i], name, surname)
+                        self.__finish_reg(driver, sms_activate, num_or_email, password)
+                        self.__close_fb_app(driver, profile_index)
+                        self.__after_closing(profile_index)
+                        driver = self.__proxy_check(driver, caps)
                     else:
                         if not self.use_email:
                             sms_activate.setStatus(id=self.activation_id,
                                                    status=8)  # сообщить о том, что номер использован и отменить активацию
-                        driver.terminate_app('com.facebook.lite')
-                        AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                   "shell pm clear com.facebook.lite")
-                        if self.delete_dalvik_cache:
-                            AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                       "shell rm -r /data/dalvik-cache")
-                            AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                       "shell rm -r /cache/dalvik-cache")
-                        self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
-                        if self.use_proxy:
-                            if len(self.change_ip_url) == 0 and self.use_dynamic_port:
-                                driver = self.__change_port(driver, caps, self.proxy_port)
-                            else:
-                                IPChanger.change_ip(self.change_ip_url)
+                        self.__close_fb_app(driver, profile_index)
+                        self.__after_closing(profile_index)
+                        driver = self.__proxy_check(driver, caps)
                 elif reg_status == 0:
-                    if not self.use_email:
-                        sms_activate.setStatus(id=self.activation_id,
-                                               status=8)  # сообщить о том, что номер использован и отменить активацию
-                    if driver.query_app_state("com.android.chrome") == 4:
-                        self.__close_chrome(driver)
-                    driver.terminate_app('com.facebook.lite')
-                    AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                               "shell pm clear com.facebook.lite")
-                    if self.delete_dalvik_cache:
-                        AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                   "shell rm -r /data/dalvik-cache")
-                        AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                                   "shell rm -r /cache/dalvik-cache")
-                    self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
-                    if self.use_proxy:
-                        if len(self.change_ip_url) == 0 and self.use_dynamic_port:
-                            driver = self.__change_port(driver, caps, self.proxy_port)
-                        else:
-                            IPChanger.change_ip(self.change_ip_url)
+                    driver = self.__unsuc_reg(driver, sms_activate, profile_index, caps)
                 elif reg_status == -1:
                     break
-            except Exception as exception:
+            except Exception:
                 # print('Failed. ' + str(e))
-                # print('Failed.')
-                if not self.use_email:
-                    sms_activate.setStatus(id=self.activation_id,
-                                           status=8)  # сообщить о том, что номер использован и отменить активацию
-                if driver.query_app_state("com.android.chrome") == 4:
-                    self.__close_chrome(driver)
-                driver.terminate_app('com.facebook.lite')
-                AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                           "shell pm clear com.facebook.lite")
-                if self.delete_dalvik_cache:
-                    AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                               "shell rm -r /data/dalvik-cache")
-                    AdbManager.execute_command(AdbManager.get_dict_value_by_key(profile_index),
-                                               "shell rm -r /cache/dalvik-cache")
-                self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
-                if self.use_proxy:
-                    if len(self.change_ip_url) == 0 and self.use_dynamic_port:
-                        driver = self.__change_port(driver, caps, self.proxy_port)
-                    else:
-                        IPChanger.change_ip(self.change_ip_url)
+                driver = self.__unsuc_reg(driver, sms_activate, profile_index, caps)
                 continue
+
         self.__exit(self.ld_console, driver, self.title)
         AdbManager.delete_index_from_dict(profile_index)
         AdbManager.remove_launched_device(device)

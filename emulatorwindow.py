@@ -173,7 +173,6 @@ class EmulatorWindow(QWidget):
         emulator.set_delete_dalvik_cache(self.delete_dalvik_cache.isChecked())
         emulator.set_emails_file(self.emails_list.text())
 
-    # @pyqtSlot()
     def run_thread(self, emulator):
         if not AppiumServer.is_running():
             AppiumServer.start()

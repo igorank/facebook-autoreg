@@ -3,14 +3,19 @@ import json
 import random
 from html import unescape
 import requests
-from useragent import UserAgent
 
 
 class FBSession:
 
     def __init__(self):
         super().__init__()
-        self.useragent = UserAgent("useragents\\useragents_win.txt")
+        self.useragent = self.get_useragents("useragents\\useragents_win.txt")
+
+    @staticmethod
+    def get_useragents(filename):
+        with open(filename, encoding='utf-8') as file:
+            lines = file.read().splitlines()
+        return lines
 
     @staticmethod
     def set_proxy(session, login, password, ip, port):
@@ -81,9 +86,6 @@ class FBSession:
         return lsd, jazoest, li, mts, action
 
     def set_useragent(self, session):
-        # hardware_types = [HardwareType.COMPUTER.value]
-        # user_agent_rotator = UserAgent(hardware_types=hardware_types)
-        # user_agent = user_agent_rotator.get_random_user_agent()
         user_agent = random.choice(self.useragent)
         session.headers.update({"User-Agent": user_agent})
         return user_agent

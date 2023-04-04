@@ -76,6 +76,13 @@ class AdbManager:
         del AdbManager.devices_dict[index]
 
     @staticmethod
+    def del_dalvik(prof_indx):
+        AdbManager.execute_command(AdbManager.get_dict_value_by_key(prof_indx),
+                                   "shell rm -r /data/dalvik-cache")
+        AdbManager.execute_command(AdbManager.get_dict_value_by_key(prof_indx),
+                                   "shell rm -r /cache/dalvik-cache")
+
+    @staticmethod
     def execute_command(device_name, command):
         with open(os.devnull, 'wb') as devnull:
             startupinfo = subprocess.STARTUPINFO()
