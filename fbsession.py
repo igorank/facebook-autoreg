@@ -18,8 +18,8 @@ class FBSession:
         return lines
 
     @staticmethod
-    def set_proxy(session, login, password, ip, port):
-        pstr = f"socks5://{login}:{password}@{ip}:{port}"
+    def set_proxy(session, login, password, ip_address, port):
+        pstr = f"socks5://{login}:{password}@{ip_address}:{port}"
         # print(f"Using proxy: {pstr}")
         sproxy = {"https": pstr, "http": pstr}
         session.proxies = sproxy

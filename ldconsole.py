@@ -187,6 +187,7 @@ class Ldconsole:
             for num, line in enumerate(my_file, 1):
                 if lookup in line:
                     return num
+        return None
 
     def set_location(self, mnq_idx, line, cord_n, cord_e):
         with open(self.path_to_ldplayer + r'\vms\config\leidian'

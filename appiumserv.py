@@ -8,15 +8,13 @@ class AppiumServer:
     '''
     Статический объект класса AppiumService.
     '''
+
     # appium_service = AppiumService()
 
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(AppiumServer, cls).__new__(cls)
         return cls.instance
-
-    def __init__(self):
-        super().__init__()
 
     # @staticmethod
     # def start():
@@ -35,7 +33,8 @@ class AppiumServer:
 
     @staticmethod
     def start(address='127.0.0.1', port='4723', timeout='999000'):
-        os.system("start /B start cmd.exe @cmd /c appium -a " + address + " -p " + port + " --command-timeout " + timeout)
+        os.system(
+            "start /B start cmd.exe @cmd /c appium -a " + address + " -p " + port + " --command-timeout " + timeout)
 
     @staticmethod
     def is_running():

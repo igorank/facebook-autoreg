@@ -9,7 +9,7 @@ class ThreadManager(QThreadPool):
         return cls.instance
 
     def __init__(self):
-        super().__init__()
+        QThreadPool.__init__(self)
         self.is_thread_running = False
 
     def set_thread_running(self, boolean):

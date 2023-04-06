@@ -71,7 +71,7 @@ class EmulatorWindow(QWidget):
 
         # DEBUG
         self.ldplayer_path.setText(r"C:\LDPlayer\LDPlayer4.0")
-        self.emails_list.setText(r"C:\Users\igora\Documents\Projects\facebook-autoreg\emails.txt")
+        self.emails_list.setText(r"C:\Users\igora\Documents\Projects\facebook-autoreg\emails_outlook.txt")
         self.proxy_host.setText("oproxy.site")
         self.proxy_port.setText("14163")
         self.proxy_login.setText("rekdEU")
