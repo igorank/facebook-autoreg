@@ -71,7 +71,7 @@ class EmulatorWindow(QWidget):
 
         # DEBUG
         self.ldplayer_path.setText(r"C:\LDPlayer\LDPlayer4.0")
-        self.emails_list.setText(r"C:\Users\igora\Documents\Projects\facebook-autoreg\emails_outlook.txt")
+        self.emails_list.setText(r"C:\Users\igora\Documents\Projects\facebook-autoreg\emails.txt")
         self.proxy_host.setText("oproxy.site")
         self.proxy_port.setText("14163")
         self.proxy_login.setText("rekdEU")
@@ -159,13 +159,11 @@ class EmulatorWindow(QWidget):
         emulator.set_path_to_ldplayer(self.ldplayer_path.text())
         emulator.set_smsactivate_api_key(self.sms_activate_api_key.text())
         emulator.set_country(self.country_number.currentText())
-        emulator.set_proxy_type(self.proxy_type.currentText())
-        emulator.set_proxy_host(self.proxy_host.text())
-        emulator.set_proxy_port(self.proxy_port.text())
-        emulator.set_proxy_login(self.proxy_login.text())
-        emulator.set_proxy_password(self.proxy_password.text())
+        emulator.set_proxy_settings(self.proxy_type.currentText(),
+                                    self.proxy_host.text(), self.proxy_login.text(),
+                                    self.proxy_password.text(), self.proxy_port.text(),
+                                    self.change_ip_url.text())
         emulator.set_number_of_profiles(self.num_of_profiles.text())
-        emulator.set_change_ip_url(self.change_ip_url.text())
         emulator.set_geo(self.ldpayer_geo.currentText())
         emulator.set_loop_number(self.loop_numbers.isChecked())
         emulator.set_use_email(self.use_eamil.isChecked())

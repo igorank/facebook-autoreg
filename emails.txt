@@ -22,7 +22,6 @@ igkeknjtbmnkumpjzdus@inbox.lv;ixvlnldgyjfu2847;YVK7H26qny;Ника Мишина;02.03.1995
 zydmygqjwsdkjrikapbn@inbox.lv;baqmghoqfesa7721;ABrfzD!E56;Федосья Боброва;08.02.1990;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0;
 zeoyouacrzhmmgipyrqv@inbox.lv;pphxhlimstun4294;YWij94KyD!;Йолана Котова;09.03.1998;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36;
 ulskebwdkjhqvmjmewtr@inbox.lv;knvtecqubndb5508;!hw9T!dWZF;Асия Шубина;04.02.1993;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36;
-bbugkczxaqsbaxrwoqxf@inbox.lv;zjxqnkshpkjv1332;dAM42ni2CG;Майя Иванова;08.08.1999;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36;
 zkgksavfvyfqwhkgwptw@inbox.lv;dhxajpfzkzpd4612;q49PP8HmTh;Альфия Шубина;05.01.1990;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36;
 lsauonjbqptemdzhepac@inbox.lv;gkhivllwmahe6780;fKE4hy9H8K;Изольда Корнилова;08.01.1992;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36;
 wibzztvdutfiuqkimxjx@inbox.lv;anogkswkkzgz2639;Xs54TeEQ1r;Харита Игнатова;08.03.1999;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0;
@@ -69,7 +68,6 @@ obsessedSheep9@inbox.lv;xxxwsqrrjbih4485;tvE5Qe24XF;Софья Моисеева;04.01.1999;Mo
 amusedOrange7@inbox.lv;szukxmmdrqas5972;19tuhC!XEK;Марина Савельева;02.02.1992;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36;
 crushedWildfowl2@inbox.lv;yscigvmcstmu6546;D1b9oPG5Bq;Майя Кулагина;02.07.1995;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36;
 enragedBoars3@inbox.lv;hcukteaoevnt2546;Mui9bSU11C;Нина Горобчук;04.09.1999;Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0;
-murkyLapwing9@inbox.lv;rfyluhxvoxct2482;4Xy6vUP2Jx;Светлана Мишина;05.02.1991;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36 Edg/96.0.1054.53;
 yearningTuna0@inbox.lv;vnzfsiiajijn1172;3c?pFZZ5Ff;Цветелина Острожска;04.05.1999;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36 Edg/96.0.1054.53;
 abjectToucan4@inbox.lv;vqrvfrkmocee9825;gnJE?9ZP7z;Марта Суворова;01.08.1996;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36;
 jealousFerret8@inbox.lv;feolajjseaua5234;kG8!3kHTrJ;Ярослава Кулагина;01.08.1997;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36;
@@ -87,7 +85,6 @@ joyfulDoves9@inbox.lv;enwaopwbqlqko8852;M2Vq4Wr7wD;Ягетта Зиновьева;02.06.1998;M
 wakefulDove5@inbox.lv;ufzcpktefunboc9791;MYc!RdJ29o;Мирослава Баранова;01.02.1992;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0;
 excitedDoves2@inbox.lv;thkwsidchviag4143;SeN19jQS3z;Зоя Семёнова;06.08.1993;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0;
 grudgingSmelt4@inbox.lv;sbnnjbquzyya2436;4fxpSDU?Z4;Милана Морозова;04.01.1992;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0;
-gleefulPoultry7@inbox.lv;dtyzanuyxrfxrv8393;VZ5e8FwB4a;Клавдия Хижняк;01.03.1996;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36;
 gutturalCur9@inbox.lv;wddpitonadcvd3909;v9BGUn7Tx1;Зоя Ефремова;02.03.1995;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36;
 sadPear0@inbox.lv;nhcmoygjlxabaw5395;Vry8S1r!XZ;Йоони Скляренко;06.04.1999;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36;
 finickySalami1@inbox.lv;spcybjvwyzpabu8901;XTn7b36xVQ;Кира Зыкова;02.07.1993;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36;

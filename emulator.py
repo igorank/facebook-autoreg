@@ -11,7 +11,8 @@ from appium.webdriver.common.mobileby import MobileBy
 from smsactivate.api import SMSActivateAPI
 from PyQt6.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
 from adb import AdbManager
-from fbsession import FBSession
+# from fbsession import FBSession
+# from fbsession import FBSession
 from ldconsole import Ldconsole
 from ipchanger import IPChanger
 from imapreader import EmailReader
@@ -20,6 +21,7 @@ from appiumserv import AppiumServer
 from randcoordgenerator import RandCoordGenerator
 from randomnumgenerator import RandomNumGenerator
 from randomuserpass import RandomGenerator
+from facebooklite import FacebookLite, find_element
 
 
 class EmulatorSignals(QObject):
@@ -32,83 +34,69 @@ class Emulator(QRunnable):
 
     def __init__(self):
         super().__init__()
-        self.fb_session = FBSession()
+        # self.fb_session = FBSession()
         self.ld_console = Ldconsole()
         self.signals = EmulatorSignals()
         self.random_coord_generator = RandCoordGenerator()
-        self.title = None
-        self.path_to_ldplayer = None  # C:\\LDPlayer\\LDPlayer4.0\\
-        self.smsactivate_api_key = None
-        self.emails_file = None
-        self.proxy_type = None
-        self.proxy_host = None
-        self.proxy_port = None
-        self.use_dynamic_port = None
-        self.proxy_start_port = None
-        self.proxy_end_port = None
-        self.proxy_login = None
-        self.proxy_password = None
-        self.change_ip_url = None
-        self.number_of_profiles = None
-        self.country = None
-        self.geo = None
-        self.loop_numbers = None
-        self.use_email = None
-        self.use_proxy = None
-        self.delete_dalvik_cache = None
-        self.phone = None
-        self.activation_id = None
-        self.date_of_birth = None
+        self.__title = None
+        self.__path_to_ldplayer = None  # C:\\LDPlayer\\LDPlayer4.0\\
+        self.__smsactivate_api_key = None
+        self.__emails_file = None
+        self.__proxy = None
+        self.__number_of_profiles = None
+        self.__country = None
+        self.__geo = None
+        self.__loop_numbers = None
+        self.__use_email = None
+        self.__use_proxy = None
+        self.__delete_dalvik_cache = None
+        self.__phone = None
+        self.__activation_id = None
 
     def set_number_of_profiles(self, num):
-        self.number_of_profiles = int(num)
+        self.__number_of_profiles = int(num)
 
     def set_path_to_ldplayer(self, path):
         path_to_ldplayer = path
         length = len(path_to_ldplayer)
         last_char = path_to_ldplayer[length - 1]
         if last_char == '\\':
-            self.path_to_ldplayer = r"{}".format(path_to_ldplayer)
+            self.__path_to_ldplayer = r"{}".format(path_to_ldplayer)
         else:
-            self.path_to_ldplayer = r"{}".format(path_to_ldplayer)
-            self.path_to_ldplayer += '\\'
+            self.__path_to_ldplayer = r"{}".format(path_to_ldplayer)
+            self.__path_to_ldplayer += '\\'
 
     def set_emails_file(self, path):
-        self.emails_file = r"{}".format(path)
+        self.__emails_file = r"{}".format(path)
 
     def set_smsactivate_api_key(self, api_str):
-        self.smsactivate_api_key = api_str
+        self.__smsactivate_api_key = api_str
 
-    def set_proxy_type(self, prx_type):
-        self.proxy_type = prx_type
+    def set_proxy_settings(self, prx_type, prx_host, prx_login,
+                           prx_pass, prx_port, url):
 
-    def set_proxy_host(self, prx_host):
-        self.proxy_host = prx_host
-
-    def set_proxy_port(self, prx_port):
         if len(prx_port) == 0:
-            self.proxy_port = None
+            proxy_port = None
+            self.__proxy = {'type': prx_type, 'host': prx_host, 'login': prx_login,
+                            'password': prx_pass, 'port': proxy_port, 'change_ip_url': url}
         else:
             if '-' in prx_port:
-                self.use_dynamic_port = True
+                use_dynamic_port = True
                 result = prx_port.partition("-")
-                self.proxy_port = int(result[0])
-                self.proxy_start_port = int(result[0])
-                self.proxy_end_port = int(result[2])
+                proxy_port = int(result[0])
+                proxy_start_port = int(result[0])
+                proxy_end_port = int(result[2])
+                self.__proxy = {'type': prx_type, 'host': prx_host, 'login': prx_login,
+                                'password': prx_pass, 'port': proxy_port, 'change_ip_url': url,
+                                'dynamic_port': use_dynamic_port, 'start_port': proxy_start_port,
+                                'end_port': proxy_end_port}
             else:
-                self.proxy_port = int(prx_port)
-
-    def set_proxy_login(self, prx_login):
-        self.proxy_login = prx_login
-
-    def set_proxy_password(self, prx_pass):
-        self.proxy_password = prx_pass
-
-    def set_change_ip_url(self, url):
-        self.change_ip_url = url
+                proxy_port = int(prx_port)
+                self.__proxy = {'type': prx_type, 'host': prx_host, 'login': prx_login,
+                                'password': prx_pass, 'port': proxy_port, 'change_ip_url': url}
 
     def set_geo(self, country):
-        self.geo = country
+        self.__geo = country
 
     def set_country(self, cntry):
         countries = {
@@ -127,19 +115,19 @@ class Emulator(QRunnable):
             'SK': 141
         }
         if cntry in countries:
-            self.country = countries[cntry]
+            self.__country = countries[cntry]
 
     def set_loop_number(self, boolean):
-        self.loop_numbers = boolean
+        self.__loop_numbers = boolean
 
     def set_use_email(self, boolean):
-        self.use_email = boolean
+        self.__use_email = boolean
 
     def set_use_proxy(self, boolean):
-        self.use_proxy = boolean
+        self.__use_proxy = boolean
 
     def set_delete_dalvik_cache(self, boolean):
-        self.delete_dalvik_cache = boolean
+        self.__delete_dalvik_cache = boolean
 
     @staticmethod
     def __get_driver(number_of_attempts, desired_caps):
@@ -182,10 +170,10 @@ class Emulator(QRunnable):
 
     def __change_port(self, driver, desried_caps, port):
         while True:
-            if port >= self.proxy_end_port:
-                self.proxy_port = self.proxy_start_port
+            if port >= self.__proxy['end_port']:
+                self.__proxy['port'] = self.__proxy['start_port']
             else:
-                self.proxy_port += 1
+                self.__proxy['port'] += 1
 
             actions = ActionChains(driver)
             actions.w3c_actions = ActionBuilder(driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
@@ -222,7 +210,7 @@ class Emulator(QRunnable):
                                              '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText')
 
             while True:
-                port_filed.send_keys(str(self.proxy_port))
+                port_filed.send_keys(str(self.__proxy['port']))
                 WebDriverWait(driver, 20).until(
                     EC.visibility_of_element_located((MobileBy.ID,
                                                       'android:id/button1')))
@@ -238,7 +226,7 @@ class Emulator(QRunnable):
                                                       '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText')))
                 port_filed = driver.find_element(MobileBy.XPATH,
                                                  '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText')
-                if port_filed.text == str(self.proxy_port):
+                if port_filed.text == str(self.__proxy['port']):
                     WebDriverWait(driver, 20).until(
                         EC.visibility_of_element_located((MobileBy.ID,
                                                           'android:id/button1')))
@@ -257,7 +245,7 @@ class Emulator(QRunnable):
             self.__swipe_left(actions)
             while self.__check_left_swap_drony(driver) != 0:
                 self.__swipe_left(actions)
-            self.find_element(driver, "id", "org.sandrob.drony:id/toggleButtonOnOff").click()
+            find_element(driver, "id", "org.sandrob.drony:id/toggleButtonOnOff").click()
             time.sleep(4)
             driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", desired_capabilities=desried_caps)
             time.sleep(8)
@@ -303,13 +291,12 @@ class Emulator(QRunnable):
                                               '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText')))
         driver.find_element(MobileBy.XPATH,
                             '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText').send_keys(
-            self.proxy_host)
+            self.__proxy['host'])
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.ID,
                                               'android:id/button1')))
         driver.find_element(MobileBy.ID,
                             'android:id/button1').click()
-        # self.find_element(driver, "id", "android:id/button1").click()
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.XPATH,
                                               '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/android.widget.ListView/android.widget.LinearLayout[6]/android.widget.LinearLayout/android.widget.TextView[1]')))
@@ -320,13 +307,12 @@ class Emulator(QRunnable):
                                               '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText')))
         driver.find_element(MobileBy.XPATH,
                             '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText').send_keys(
-            self.proxy_port)
+            self.__proxy['port'])
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.ID,
                                               'android:id/button1')))
         driver.find_element(MobileBy.ID,
                             'android:id/button1').click()
-        # self.find_element(driver, "id", "android:id/button1").click()
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.XPATH,
                                               '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/android.widget.ListView/android.widget.LinearLayout[7]/android.widget.LinearLayout/android.widget.TextView[1]')))
@@ -337,13 +323,12 @@ class Emulator(QRunnable):
                                               '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText')))
         driver.find_element(MobileBy.XPATH,
                             '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText').send_keys(
-            self.proxy_login)
+            self.__proxy['login'])
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.ID,
                                               'android:id/button1')))
         driver.find_element(MobileBy.ID,
                             'android:id/button1').click()
-        # self.find_element(driver, "id", "android:id/button1").click()
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.XPATH,
                                               '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/android.widget.ListView/android.widget.LinearLayout[8]/android.widget.LinearLayout/android.widget.TextView[1]')))
@@ -354,7 +339,7 @@ class Emulator(QRunnable):
                                               '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText')))
         driver.find_element(MobileBy.XPATH,
                             '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.widget.EditText').send_keys(
-            self.proxy_password)
+            self.__proxy['password'])
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.ID,
                                               'android:id/button1')))
@@ -369,8 +354,6 @@ class Emulator(QRunnable):
                                               '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/android.widget.ListView/android.widget.LinearLayout[9]/android.widget.LinearLayout/android.widget.TextView[1]')))
         driver.find_element(MobileBy.XPATH,
                             '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/android.widget.ListView/android.widget.LinearLayout[9]/android.widget.LinearLayout/android.widget.TextView[1]').click()
-        # self.find_element(driver, "xpath",
-        #                   "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/android.widget.ListView/android.widget.LinearLayout[9]/android.widget.LinearLayout/android.widget.TextView[1]").click()
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((MobileBy.XPATH,
                                               '/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.TextView[4]')))
@@ -388,9 +371,9 @@ class Emulator(QRunnable):
         self.__swipe_left(actions)
         while self.__check_left_swap_drony(driver) != 0:
             self.__swipe_left(actions)
-        self.find_element(driver, "id", "org.sandrob.drony:id/toggleButtonOnOff").click()
+        find_element(driver, "id", "org.sandrob.drony:id/toggleButtonOnOff").click()
         try:
-            self.find_element(driver, "id", "android:id/button1").click()
+            find_element(driver, "id", "android:id/button1").click()
         except NoSuchElementException:
             pass
         time.sleep(4)
@@ -399,159 +382,6 @@ class Emulator(QRunnable):
         driver.back()
         time.sleep(1)
         return driver
-
-    @staticmethod
-    def __check_fb_loaded(driver):
-        try:
-            WebDriverWait(driver, 25).until(
-                EC.visibility_of_element_located(
-                    (MobileBy.ID, 'com.android.packageinstaller:id/permission_allow_button')))
-        except Exception as exc:
-            print("Failed to initialize Facebook Lite. Check Internet connection")
-            raise Exception from exc
-
-    def __fill_reg_form1(self, driver, name):
-        self.find_element(driver, "xpath",  # Создать акк
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/androidx.recyclerview.widget.RecyclerView/android.view.ViewGroup/android.view.ViewGroup[3]/android.view.View",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/androidx.recyclerview.widget.RecyclerView/android.view.ViewGroup/android.view.ViewGroup[3]").click()
-        self.find_element(driver, "xpath",  # Далее
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
-        self.find_element(driver, "xpath",  # Имя
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView[1]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView[1]").send_keys(
-            name)
-
-    @staticmethod
-    def __enter_surname(driver, surname):
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView[2]').send_keys(
-                    surname)
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView[2]').send_keys(
-                        surname)
-                    break
-                except NoSuchElementException:
-                    continue
-
-    @staticmethod
-    def __click_next(driver):
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,  # Далее
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]").click()
-                    break
-                except NoSuchElementException:
-                    continue
-
-    def __enter_email(self, driver, email):
-        self.find_element(driver, "xpath",  # Зарегис. с эл. адресом
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/androidx.recyclerview.widget.RecyclerView/android.view.ViewGroup[6]/android.view.ViewGroup[2]/android.view.View",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/androidx.recyclerview.widget.RecyclerView/android.view.ViewGroup[6]/android.view.ViewGroup[2]/android.view.View").click()  # зарег с помощью почты кнопка
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView").send_keys(
-            email)  # email field
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]").click()  # Next Button
-
-    def __enter_phone_num(self, driver):
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView").send_keys(
-            self.phone)  # phone number
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()  # next button
-
-    def __click_next2(self, driver):
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup[2]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[2]").click()  # next
-
-    def __choose_gender(self, driver):
-        WebDriverWait(driver, 40).until(EC.any_of(
-            EC.element_to_be_clickable((MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.view.ViewGroup[1]/android.view.View[1]")),
-            EC.element_to_be_clickable((MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.View[1]"))
-        ))
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.view.ViewGroup[1]/android.view.View[1]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.View[1]").click()  # female text
-
-    def __finishing_registration(self, driver):
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.view.ViewGroup[1]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]").click()  # next
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.view.ViewGroup[7]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[7]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[5]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[5]").click()
-
-    def __facebook_lite_reg(self, driver, name, surname, password, num_or_email=None, use_email=False) -> int:
-        actions = ActionChains(driver)
-        actions.w3c_actions = ActionBuilder(driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
-
-        try:
-            WebDriverWait(driver, 60).until(
-                EC.element_to_be_clickable((MobileBy.ACCESSIBILITY_ID, 'Lite')))
-            driver.find_element(MobileBy.ACCESSIBILITY_ID, 'Lite').click()
-
-            self.__check_fb_loaded(driver)
-            driver.find_element(MobileBy.ID, 'com.android.packageinstaller:id/permission_deny_button').click()
-            self.__fill_reg_form1(driver, name)
-            self.__enter_surname(driver, surname)
-            self.__click_next(driver)
-
-            for _ in range(3):
-                self.find_element(driver, "id", "com.android.packageinstaller:id/permission_deny_button").click()
-
-            if use_email:
-                self.__enter_email(driver, num_or_email)
-            else:
-                self.__enter_phone_num(driver)
-
-            if self.__date_field_available(driver):
-                day = self.__send_day_facebooklite(driver)
-                month = self.__send_month_facebooklite(driver)
-                year = self.__send_year_facebooklite(driver)
-                self.date_of_birth = day + "." + month + "." + year
-            else:
-                return 0
-
-            self.__click_next2(driver)  # next
-            self.__choose_gender(driver)
-
-            if self.__password_field_available(driver):
-                time.sleep(1)
-                self.__delay_send(actions, password, random.uniform(0.05, 0.1))
-                time.sleep(1)
-            else:
-                return 0
-
-            self.__finishing_registration(driver)
-        except NameError as name_error:
-            print(name_error)
-            return -1
-        except ValueError as value_error:
-            print(value_error)
-            return 0
-        if self.__check_checkpoint_lite(driver) == 0:
-            return 1
-        return 0
 
     def __get_mobile_code(self, sms_act, driver, order_id, delay):
         attempts_get_code = 0
@@ -566,9 +396,9 @@ class Emulator(QRunnable):
             try:
                 if driver.find_element(MobileBy.XPATH,
                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup"):
-                    self.find_element(driver, "xpath",
-                                      "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]",
-                                      "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]").click()
+                    find_element(driver, "xpath",
+                                 "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]",
+                                 "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]").click()
             except NoSuchElementException:
                 pass
             attempts_get_code = attempts_get_code + 1
@@ -578,20 +408,21 @@ class Emulator(QRunnable):
         print("SMS did not come")
         return 0
 
-    def __verify_fblite_by_mob(self, driver, code):
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView").click()  # inpute code field
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView").send_keys(
+    @staticmethod
+    def __verify_fblite_by_mob(driver, code):
+        find_element(driver, "xpath",
+                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView",
+                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView").click()  # inpute code field
+        find_element(driver, "xpath",
+                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView",
+                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView").send_keys(
             str(code))
-        self.find_element(driver, "xpath",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
-                          "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
+        find_element(driver, "xpath",
+                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
+                     "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
 
     def __get_number(self, sms_act):
-        sa_number = sms_act.getNumber(service='fb', country=self.country)
+        sa_number = sms_act.getNumber(service='fb', country=self.__country)
         try:
             number = sa_number['phone']
             return sa_number
@@ -601,7 +432,7 @@ class Emulator(QRunnable):
 
     def __get_pnumber(self, sms_act):
 
-        if self.loop_numbers:
+        if self.__loop_numbers:
             sa_number = 0
             while sa_number == 0:
                 sa_number = self.__get_number(sms_act)
@@ -627,7 +458,7 @@ class Emulator(QRunnable):
     #     # return useragent, cookies, token
 
     def __get_names(self, names, surnames, names_eng, surnames_eng):
-        if self.geo in Emulator.CYRILLIC_COUNTRIES:
+        if self.__geo in Emulator.CYRILLIC_COUNTRIES:
             name = names[random.randint(0, 197)]
             surname = surnames[random.randint(0, 197)]
         else:
@@ -636,60 +467,13 @@ class Emulator(QRunnable):
         return name, surname
 
     def __get_mailornum(self, emails, num, sms_act):
-        if self.use_email:
+        if self.__use_email:
             num_or_email = emails[num].partition(";")[0]
         else:
             num_or_email = self.__get_pnumber(sms_act)
-            self.phone = num_or_email['phone']
-            self.activation_id = num_or_email['activation_id']
+            self.__phone = num_or_email['phone']
+            self.__activation_id = num_or_email['activation_id']
         return num_or_email
-
-    @staticmethod
-    def find_element(driver, find_by, element, alternative_element=None,
-                     alternative_element2=None, alternative_element3=None):
-        for _ in range(15):
-            try:
-                time.sleep(3)
-                if find_by == "id":
-                    return driver.find_element(MobileBy.ID, str(element))
-                if find_by == "ac_id":
-                    return driver.find_element(MobileBy.ACCESSIBILITY_ID, str(element))
-                if find_by == "xpath":
-                    return driver.find_element(MobileBy.XPATH, str(element))
-            except NoSuchElementException:
-                if alternative_element is not None:
-                    try:
-                        if find_by == "id":
-                            return driver.find_element(MobileBy.ID, str(alternative_element))
-                        if find_by == "ac_id":
-                            return driver.find_element(MobileBy.ACCESSIBILITY_ID, str(alternative_element))
-                        if find_by == "xpath":
-                            return driver.find_element(MobileBy.XPATH, str(alternative_element))
-                    except NoSuchElementException:
-                        if alternative_element2 is not None:
-                            try:
-                                if find_by == "id":
-                                    return driver.find_element(MobileBy.ID, str(alternative_element2))
-                                if find_by == "ac_id":
-                                    return driver.find_element(MobileBy.ACCESSIBILITY_ID, str(alternative_element2))
-                                if find_by == "xpath":
-                                    return driver.find_element(MobileBy.XPATH, str(alternative_element2))
-                            except NoSuchElementException:
-                                if alternative_element3 is not None:
-                                    try:
-                                        if find_by == "id":
-                                            return driver.find_element(MobileBy.ID, str(alternative_element3))
-                                        if find_by == "ac_id":
-                                            return driver.find_element(MobileBy.ACCESSIBILITY_ID,
-                                                                       str(alternative_element3))
-                                        if find_by == "xpath":
-                                            return driver.find_element(MobileBy.XPATH, str(alternative_element3))
-                                    except NoSuchElementException:
-                                        pass
-            time.sleep(2)
-        print(str(element) + " can not be found")
-        time.sleep(9999)    # TEMP
-        # raise ValueError(str(element) + " can not be found")
 
     @staticmethod
     def __check_right_swap_drony(driver):
@@ -731,118 +515,6 @@ class Emulator(QRunnable):
         actions.perform()
 
     @staticmethod
-    def __delay_send(actions, word, delay):
-        for i in word:
-            actions.send_keys(i)
-            actions.perform()
-            time.sleep(delay)
-
-    @staticmethod
-    def __password_field_available(driver):
-        for _ in range(30):
-            try:
-                if driver.find_element(MobileBy.XPATH,
-                                       "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[2]/android.widget.MultiAutoCompleteTextView"):
-                    return True
-            except NoSuchElementException:
-                try:
-                    if driver.find_element(MobileBy.XPATH,
-                                           "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
-                        return True
-                except NoSuchElementException:
-                    pass
-            time.sleep(2)
-        print("Error: can't find password field")
-        return False
-
-    @staticmethod
-    def __date_field_available(driver):
-        for _ in range(10):
-            try:
-                if driver.find_element(MobileBy.XPATH,
-                                       "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup[1]"):
-                    return True
-            except NoSuchElementException:
-                try:
-                    if driver.find_element(MobileBy.XPATH,
-                                           "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]"):
-                        return True
-                except NoSuchElementException:
-                    pass
-            time.sleep(2)
-        print("Error: can't find date field")
-        return False
-
-    @staticmethod
-    def __check_checkpoint_lite(driver) -> int:
-        for _ in range(30):
-            try:
-                if driver.find_element(MobileBy.XPATH,
-                                       "//android.view.View[@content-desc=\"Скачать информацию\"]/android.widget.TextView"):
-                    print("Checkpoint")
-                    return 1
-            except NoSuchElementException:
-                try:
-                    if driver.find_element(MobileBy.XPATH,
-                                           "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View/android.view.View/android.view.View[1]/android.view.View[1]"):
-                        print("Checkpoint")
-                        return 1
-                except NoSuchElementException:
-                    try:
-                        if driver.find_element(MobileBy.XPATH,
-                                               "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.widget.MultiAutoCompleteTextView"):
-                            print("Email has been already used")
-                            return 1
-                    except NoSuchElementException:
-                        try:
-                            if driver.find_element(MobileBy.XPATH,
-                                                   "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.View[5]"):
-                                print("Unknown error")
-                                return 1
-                        except NoSuchElementException:
-                            try:
-                                driver.find_element(MobileBy.XPATH,
-                                                    '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.View').click()
-                                print("Successful registration")
-                                Emulator.find_element(driver, "id",
-                                                      "com.android.packageinstaller:id/permission_deny_button").click()
-                                return 0
-                            except NoSuchElementException:
-                                try:
-                                    driver.find_element(MobileBy.XPATH,
-                                                        '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.View').click()
-                                    print("Successful registration")
-                                    Emulator.find_element(driver, "id",
-                                                          "com.android.packageinstaller:id/permission_deny_button").click()
-                                    return 0
-                                except NoSuchElementException:
-                                    try:
-                                        driver.find_element(MobileBy.XPATH,
-                                                            '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]').click()  # "произошла ошибка"
-                                        Emulator.find_element(driver, "xpath",
-                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[7]",
-                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[7]",
-                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[5]",
-                                                              "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[5]").click()  # registration
-                                    except NoSuchElementException:
-                                        try:
-                                            driver.find_element(MobileBy.XPATH,
-                                                                "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/androidx.recyclerview.widget.RecyclerView/android.view.ViewGroup/android.view.ViewGroup[3]/android.view.View")
-                                            print("Redirection error")
-                                            return 1
-                                        except NoSuchElementException:
-                                            try:
-                                                driver.find_element(MobileBy.XPATH,
-                                                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/androidx.recyclerview.widget.RecyclerView/android.view.ViewGroup/android.view.ViewGroup[3]/android.view.View")
-                                                print("Redirection error")
-                                                return 1
-                                            except NoSuchElementException:
-                                                pass
-            time.sleep(3)
-        print("Error")
-        return 2
-
-    @staticmethod
     def __check_registration(driver, use_email=False) -> bool:
         for _ in range(45):
             if not use_email:
@@ -873,142 +545,14 @@ class Emulator(QRunnable):
             try:
                 driver.find_element(MobileBy.XPATH,
                                     '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.View[3]').click()  # "произошла ошибка"
-                Emulator.find_element(driver, "xpath",
-                                      "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
-                                      "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
+                find_element(driver, "xpath",
+                             "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[1]/android.view.ViewGroup[1]",
+                             "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.view.ViewGroup[2]/android.view.ViewGroup[1]").click()
             except NoSuchElementException:
                 pass
             time.sleep(2)
         print("Error. Profile has not been verified")
         return False
-
-    @staticmethod
-    def __send_year_facebooklite(driver):
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[1]/android.view.View").click()  # 1
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[1]/android.view.View").click()  # 1
-                    break
-                except NoSuchElementException:
-                    continue
-        time.sleep(0.5)
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[9]/android.view.View").click()  # 9
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[9]/android.view.View").click()  # 9
-                    break
-                except NoSuchElementException:
-                    continue
-        time.sleep(0.5)
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[9]/android.view.View").click()  # 9
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[9]/android.view.View").click()  # 9
-                    break
-                except NoSuchElementException:
-                    continue
-        time.sleep(0.5)
-        num1 = random.randint(1, 9)
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
-                                        num1) + "]/android.view.View").click()
-                # random
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
-                                            num1) + "]/android.view.View").click()  # random
-                    break
-                except NoSuchElementException:
-                    continue
-        return str("199") + str(num1)
-
-    @staticmethod
-    def __send_day_facebooklite(driver):
-        time.sleep(0.5)
-        num1 = random.randint(1, 2)
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
-                                        num1) + "]/android.view.View").click()  # random 1-2
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
-                                            num1) + "]/android.view.View").click()  # random 1-2
-                    break
-                except NoSuchElementException:
-                    continue
-        time.sleep(0.5)
-        num2 = random.randint(1, 8)
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
-                                        num2) + "]/android.view.View").click()  # random 1-8
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
-                                            num2) + "]/android.view.View").click()  # random 1-8
-                    break
-                except NoSuchElementException:
-                    continue
-        return str(num1) + str(num2)
-
-    @staticmethod
-    def __send_month_facebooklite(driver):
-        time.sleep(0.5)
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[11]/android.view.View").click()  # 0
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[11]/android.view.View").click()  # 0
-                    break
-                except NoSuchElementException:
-                    continue
-        time.sleep(0.5)
-        num1 = random.randint(1, 8)
-        while True:
-            try:
-                driver.find_element(MobileBy.XPATH,
-                                    "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[4]/android.view.ViewGroup[" + str(
-                                        num1) + "]/android.view.View").click()  # random 1-8
-                break
-            except NoSuchElementException:
-                try:
-                    driver.find_element(MobileBy.XPATH,
-                                        "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup[3]/android.view.ViewGroup[" + str(
-                                            num1) + "]/android.view.View").click()  # random 1-8
-                    break
-                except NoSuchElementException:
-                    continue
-        return str(0) + str(num1)
 
     @staticmethod
     def __get_device(prof_index):
@@ -1034,43 +578,43 @@ class Emulator(QRunnable):
                                            "shell pm clear org.sandrob.drony")
 
     def __get_code(self, driver, sms_activate, num_or_email, email):
-        if self.use_email:
+        if self.__use_email:
             mail_reader = EmailReader("mail.inbox.lv", num_or_email,
                                       email.partition(";")[2].partition(";")[2].partition(";")[0])
             code = mail_reader.get_facebook_code(300)  # аргумент - задержка
-            FileManager.remove_line_by_text(self.emails_file,
+            FileManager.remove_line_by_text(self.__emails_file,
                                             str(num_or_email))  # удаляем почту из txt файла
         else:
-            code = self.__get_mobile_code(sms_activate, driver, self.activation_id,
+            code = self.__get_mobile_code(sms_activate, driver, self.__activation_id,
                                           8)  # получаем код на номер
         return code
 
-    def __write_file(self, num_or_email, passw, email, name, surname):
+    def __write_file(self, num_or_email, passw, email, name, surname, date_of_birth):
         with open("autoregs_emu.txt", "a") as file:
-            fb_username = num_or_email if self.use_email else self.phone
+            fb_username = num_or_email if self.__use_email else self.__phone
             file.write(str(fb_username) + ";" + passw + ";")
-            if self.use_email:
+            if self.__use_email:
                 file.write(email.partition(";")[2].partition(";")[0] + ";")  # write email password
-            file.write(name + " " + surname + ";" + self.date_of_birth + ";\n")
+            file.write(name + " " + surname + ";" + date_of_birth + ";\n")
 
     def __proxy_check(self, driver, caps):
-        if self.use_proxy:
-            if len(self.change_ip_url) == 0 and self.use_dynamic_port:
-                driver = self.__change_port(driver, caps, self.proxy_port)
+        if self.__use_proxy:
+            if len(self.__proxy['change_ip_url']) == 0 and self.__proxy['dynamic_port']:
+                driver = self.__change_port(driver, caps, self.__proxy['port'])
                 return driver
-            IPChanger.change_ip(self.change_ip_url)
+            IPChanger.change_ip(self.__proxy['change_ip_url'])
         return driver
 
     def __unsuc_reg(self, driver, sms_activate, profile_index, caps):
-        if not self.use_email:
-            sms_activate.setStatus(id=self.activation_id,
+        if not self.__use_email:
+            sms_activate.setStatus(id=self.__activation_id,
                                    status=8)  # сообщить о том, что номер использован и отменить активацию
         if driver.query_app_state("com.android.chrome") == 4:
             driver.terminate_app('com.android.chrome')
         self.__close_fb_app(driver, profile_index)
-        if self.delete_dalvik_cache:
+        if self.__delete_dalvik_cache:
             AdbManager.del_dalvik(profile_index)
-        self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
+        self.ld_console.randomize_settings(profile_index, self.__geo, self.__delete_dalvik_cache)
         driver = self.__proxy_check(driver, caps)
         return driver
 
@@ -1080,20 +624,20 @@ class Emulator(QRunnable):
             file.write("\n")
 
     def __terminate(self, driver, device, profile_index):
-        self.__exit(self.ld_console, driver, self.title)
-        IPChanger.change_ip(self.change_ip_url)
+        self.__exit(self.ld_console, driver, self.__title)
+        IPChanger.change_ip(self.__proxy['change_ip_url'])
         AdbManager.delete_index_from_dict(profile_index)
         AdbManager.remove_launched_device(device)
 
     def __get_emails(self):
-        if self.use_email:
+        if self.__use_email:
             try:
-                emails = FileManager.get_filesdata(self.emails_file, True)
+                emails = FileManager.get_filesdata(self.__emails_file, True)
                 random.shuffle(emails)  # reorganize the order of the list items
-                self.number_of_profiles = len(emails)
+                self.__number_of_profiles = len(emails)
                 return emails
             except Exception as exception:
-                print(f"Unable to open file {str(self.emails_file)}: " + str(exception))
+                print(f"Unable to open file {str(self.__emails_file)}: " + str(exception))
                 AppiumServer.forced_stop()
                 return None
         else:
@@ -1108,24 +652,23 @@ class Emulator(QRunnable):
         surnames_eng = FileManager.get_filesdata('names\\surnames_eng.txt')
         return [names, surnames, names_eng, surnames_eng]
 
-    # def __finish_reg(self, driver, sms_activate, num_or_email, password):
     def __finish_reg(self, driver, sms_activate):
-        if self.__check_registration(driver, self.use_email):
+        if self.__check_registration(driver, self.__use_email):
             self.__write_newl()
             # try:
             #     self.__get_fbdata(num_or_email, self.phone, password, "autoregs_emu.txt")
             # except Exception as exception:
             #     print(exception)
             #     self.__write_newl()
-            if not self.use_email:
-                sms_activate.setStatus(id=self.activation_id, status=6)  # завершить активацию
+            if not self.__use_email:
+                sms_activate.setStatus(id=self.__activation_id, status=6)  # завершить активацию
         else:
             self.__write_newl()
 
     def __after_closing(self, profile_index):
-        if self.delete_dalvik_cache:
+        if self.__delete_dalvik_cache:
             AdbManager.del_dalvik(profile_index)
-        self.ld_console.randomize_settings(profile_index, self.geo, self.delete_dalvik_cache)
+        self.ld_console.randomize_settings(profile_index, self.__geo, self.__delete_dalvik_cache)
 
     @staticmethod
     def __close_fb_app(driver, profile_index):
@@ -1134,7 +677,7 @@ class Emulator(QRunnable):
                                    "shell pm clear com.facebook.lite")
 
     def __loop(self, driver, sms_activate, prof_data, emails, profile_index):
-        for i in range(self.number_of_profiles):
+        for i in range(self.__number_of_profiles):
             try:
                 num_or_email = self.__get_mailornum(emails, i, sms_activate)
                 if not num_or_email:
@@ -1142,20 +685,24 @@ class Emulator(QRunnable):
 
                 name, surname = self.__get_names(prof_data[0], prof_data[1], prof_data[2], prof_data[3])
                 password = RandomGenerator.random_password(random.randint(12, 16))
-                reg_status = self.__facebook_lite_reg(driver['driver'], name, surname, password, num_or_email,
-                                                      use_email=self.use_email)
-                if reg_status == 1:
+                profile_data = {'name': name, 'surname': surname, 'password': password}
+
+                facebookl = FacebookLite(driver['driver'], self.__phone)
+                reg_status = facebookl.register(profile_data, num_or_email, use_email=self.__use_email)
+
+                if isinstance(reg_status, str):
                     code = self.__get_code(driver['driver'], sms_activate, num_or_email, emails[i])
                     if code != 0:
                         self.__verify_fblite_by_mob(driver['driver'], code)
-                        self.__write_file(num_or_email, password, emails[i], name, surname)
+                        self.__write_file(num_or_email, password, emails[i],
+                                          name, surname, reg_status)
                         self.__finish_reg(driver['driver'], sms_activate)
                         self.__close_fb_app(driver['driver'], profile_index)
                         self.__after_closing(profile_index)
                         driver['driver'] = self.__proxy_check(driver['driver'], driver['caps'])
                     else:
-                        if not self.use_email:
-                            sms_activate.setStatus(id=self.activation_id,
+                        if not self.__use_email:
+                            sms_activate.setStatus(id=self.__activation_id,
                                                    status=8)  # сообщить о том, что номер использован и отменить активацию
                         self.__close_fb_app(driver['driver'], profile_index)
                         self.__after_closing(profile_index)
@@ -1171,8 +718,8 @@ class Emulator(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        self.ld_console.set_path(self.path_to_ldplayer)
-        sms_activate = SMSActivateAPI(self.smsactivate_api_key)
+        self.ld_console.set_path(self.__path_to_ldplayer)
+        sms_activate = SMSActivateAPI(self.__smsactivate_api_key)
         sms_activate.debug_mode = True  # TEMP?
 
         prof_data = self.__get_profile_data()
@@ -1181,19 +728,19 @@ class Emulator(QRunnable):
             self.signals.finished.emit()
             return
 
-        self.title = RandomGenerator.random_username(8)  # рвндомное название плеера
-        self.ld_console.add(self.title)  # создаем плеер
+        self.__title = RandomGenerator.random_username(8)  # рвндомное название плеера
+        self.ld_console.add(self.__title)  # создаем плеер
 
-        n_cord, e_cord = self.random_coord_generator.get_rand_coord(self.geo)
+        n_cord, e_cord = self.random_coord_generator.get_rand_coord(self.__geo)
 
-        profile_index = self.ld_console.get_profile_index(self.title)
+        profile_index = self.ld_console.get_profile_index(self.__title)
         line = self.ld_console.find_num_of_line(profile_index)
         self.ld_console.set_debug_mode(profile_index, line)
         self.ld_console.set_location(profile_index, line, cord_n=n_cord, cord_e=e_cord)
 
         number = RandomNumGenerator.get_rand_mob_num()
-        self.ld_console.modify(self.title, str(number))
-        self.ld_console.launch(self.title)
+        self.ld_console.modify(self.__title, str(number))
+        self.ld_console.launch(self.__title)
         time.sleep(10)  # TEMP
 
         device = self.__get_device(profile_index)
@@ -1206,19 +753,19 @@ class Emulator(QRunnable):
             self.signals.finished.emit()
             return
 
-        print("Profile " + str(self.title) + " has been connected to Appium")
+        print("Profile " + str(self.__title) + " has been connected to Appium")
         self.signals.connected.emit()
 
-        if self.use_proxy:
-            self.ld_console.install_app(self.title, app_name=r'apps\drony.apk')
+        if self.__use_proxy:
+            self.ld_console.install_app(self.__title, app_name=r'apps\drony.apk')
             driver = self.__init_drony(driver, caps, profile_index)
 
         driver = {"driver": driver, "caps": caps}
-        self.ld_console.install_app(self.title, app_name=r'apps\facebook_lite_v348.0.0.8.103.apk')
+        self.ld_console.install_app(self.__title, app_name=r'apps\facebook_lite_v348.0.0.8.103.apk')
 
         self.__loop(driver, sms_activate, prof_data, emails, profile_index)
 
-        self.__exit(self.ld_console, driver['driver'], self.title)
+        self.__exit(self.ld_console, driver['driver'], self.__title)
         AdbManager.delete_index_from_dict(profile_index)
         AdbManager.remove_launched_device(device)
         self.signals.finished.emit()

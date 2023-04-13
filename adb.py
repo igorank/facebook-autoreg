@@ -11,9 +11,9 @@ class AdbManager:
 
     @staticmethod
     def is_running():
-        '''
+        """
         Check if appium server (Node) is already running.
-        '''
+        """
         # Iterate over the all the running process
         for proc in psutil.process_iter():
             try:
